@@ -50,7 +50,7 @@
             if (!email) return;
 
             // כתובת Apps Script שלך:
-            const scriptURL = 'https://script.google.com/macros/s/AKfycby9G7AuNvmH3niyk4KXZxYd6YKYgDOUuz-TwD1x7CCrzvgY7-3UO8dVD5fHojav7a6RVA/exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbysrIeNeKQYvGkWWryWEYI05ri18JteBzXQ8lHEXE1xXi7gNDP5ZVm0nrC_bbxxyL8YNw/exec';
 
             fetch(scriptURL + '?email=' + encodeURIComponent(email))
                 .then(response => {

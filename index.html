@@ -29,6 +29,11 @@
             font-size: 1.1em;
             line-height: 1.6em;
         }
+        .status {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -38,6 +43,7 @@
         <p>הקליק על הקישור נרשם לצורך ניתוח התוצאות.</p>
         <p>זכרו: אל תלחצו על קישורים חשודים! בדקו תמיד את כתובת השולח ואת הקישור אליו אתם מופנים.</p>
         <p>תודה על שיתוף הפעולה.</p>
+        <div class="status" id="statusMessage">רושם את הפעולה...</div>
     </div>
 
     <script>
@@ -47,16 +53,23 @@
         }
 
         function reportClick(email) {
-            if (!email) return;
+            if (!email) {
+                document.getElementById('statusMessage').textContent = 'שגיאה: כתובת מייל לא נמצאה.';
+                return;
+            }
 
-            // כתובת Apps Script שלך:
             const scriptURL = 'https://script.google.com/macros/s/AKfycbxscDm4Lf5duQdJ6gYoPZv4eYDlJLUr6vmgRhpddRDsm3nAtfrBD_f1nmfAuestgpq1lA/exec';
 
             fetch(scriptURL + '?email=' + encodeURIComponent(email))
                 .then(response => {
-                    console.log('Click reported for:', email);
+                    if (response.ok) {
+                        document.getElementById('statusMessage').textContent = 'הפעולה נרשמה בהצלחה.';
+                    } else {
+                        document.getElementById('statusMessage').textContent = 'אירעה שגיאה בשליחת הנתון.';
+                    }
                 })
                 .catch(error => {
+                    document.getElementById('statusMessage').textContent = 'שגיאה בחיבור לשרת.';
                     console.error('Error reporting click:', error);
                 });
         }

@@ -41,7 +41,6 @@
     </div>
 
     <script>
-        // הפונקציה שולפת את המייל מה-URL
         function getEmailFromURL() {
             const params = new URLSearchParams(window.location.search);
             return params.get('email') || '';
@@ -49,15 +48,19 @@
 
         function reportClick(email) {
             if (!email) return;
-            // שים כאן את ה-URL של Google Apps Script שלך:
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzEXV3ForGhtBcTlw5keLrNLfjdWiKvXzyWBSJstGgkg0GL5fPt2SJ6p8zI86Ors_jiwg/exec';
+
+            // כתובת Apps Script שלך:
+            const scriptURL = 'https://script.google.com/macros/s/AKfycby9G7AuNvmH3niyk4KXZxYd6YKYgDOUuz-TwD1x7CCrzvgY7-3UO8dVD5fHojav7a6RVA/exec';
 
             fetch(scriptURL + '?email=' + encodeURIComponent(email))
-                .then(response => console.log('Click reported for:', email))
-                .catch(error => console.error('Error reporting click:', error));
+                .then(response => {
+                    console.log('Click reported for:', email);
+                })
+                .catch(error => {
+                    console.error('Error reporting click:', error);
+                });
         }
 
-        // הרצה בעת טעינת הדף
         document.addEventListener('DOMContentLoaded', () => {
             const email = getEmailFromURL();
             reportClick(email);

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>בדיקת מודעות לאבטחת מידע</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f7ff;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+            direction: rtl;
+        }
+        .box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+            display: inline-block;
+            max-width: 500px;
+            text-align: right;
+        }
+        h1 {
+            color: #cc0000;
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.6em;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>שימו לב!</h1>
+        <p>המייל שקיבלתם היה תרגול לזיהוי ניסיון פישינג במסגרת הגברת המודעות לאבטחת מידע בארגון.</p>
+        <p>הקליק על הקישור נרשם לצורך ניתוח התוצאות.</p>
+        <p>זכרו: אל תלחצו על קישורים חשודים! בדקו תמיד את כתובת השולח ואת הקישור אליו אתם מופנים.</p>
+        <p>תודה על שיתוף הפעולה.</p>
+    </div>
+
+    <script>
+        // הפונקציה שולפת את המייל מה-URL
+        function getEmailFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('email') || '';
+        }
+
+        function reportClick(email) {
+            if (!email) return;
+            // שים כאן את ה-URL של Google Apps Script שלך:
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzEXV3ForGhtBcTlw5keLrNLfjdWiKvXzyWBSJstGgkg0GL5fPt2SJ6p8zI86Ors_jiwg/exec';
+
+            fetch(scriptURL + '?email=' + encodeURIComponent(email))
+                .then(response => console.log('Click reported for:', email))
+                .catch(error => console.error('Error reporting click:', error));
+        }
+
+        // הרצה בעת טעינת הדף
+        document.addEventListener('DOMContentLoaded', () => {
+            const email = getEmailFromURL();
+            reportClick(email);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>דשבורד מנהלים - מעקב אבטחת מידע</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e5e8ec;
+      color: #222;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0b3d91;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    .table-container {
+      max-width: 1200px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    thead {
+      background-color: #0b3d91;
+      color: #fff;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    thead th {
+      font-weight: 600;
+      font-size: 15px;
+      text-align: right; /* מיושרות לימין */
+    }
+
+    tbody td {
+      text-align: right; /* תוכן השורות לימין */
+    }
+
+    tbody tr:hover {
+      background-color: #f1f4f8;
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #555;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .table-container {
+        padding: 15px;
+      }
+
+      th, td {
+        padding: 10px 12px;
+      }
+    }
+  </style>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</head>
+<body>
+
+  <h1>דשבורד מנהלים - מעקב אבטחת מידע</h1>
+
+  <div class="table-container">
+    <table id="employeeTable" class="display">
+      <thead>
+        <tr>
+          <th>שם העובד</th>
+          <th>כתובת מייל</th>
+          <th>מספר קליקים</th>
+          <th>תאריך קליק אחרון</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Improve-IT | כל הזכויות שמורות
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      const apiUrl = 'https://script.google.com/macros/s/AKfycbwyfAyNPtWX7akFXrSkZR3yA0fgZccKQkyll7a_RHKSfhoXhpacQBcf_Oc6pdvDryYvvQ/exec';
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(item => {
+            $('#employeeTable tbody').append(`
+              <tr>
+                <td>${item['Name'] || '-'}</td>
+                <td>${item['Email'] || '-'}</td>
+                <td>${item['Times Link Was Clicked'] || '0'}</td>
+                <td>${item['Last Day Clicked'] || '-'}</td>
+              </tr>
+            `);
+          });
+
+          $('#employeeTable').DataTable({
+            order: [[2, 'desc']],
+            pageLength: 25,
+            language: {
+              "decimal": "",
+              "emptyTable": "אין נתונים בטבלה",
+              "info": "מציג _START_ עד _END_ מתוך _TOTAL_ רשומות",
+              "infoEmpty": "מציג 0 עד 0 מתוך 0 רשומות",
+              "infoFiltered": "(מסונן מתוך _MAX_ רשומות סה\"כ)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "הצג _MENU_ רשומות",
+              "loadingRecords": "טוען...",
+              "processing": "מעבד...",
+              "search": "חיפוש:",
+              "zeroRecords": "לא נמצאו רשומות תואמות",
+              "paginate": {
+                "first": "ראשון",
+                "last": "אחרון",
+                "next": "הבא",
+                "previous": "הקודם"
+              },
+              "aria": {
+                "sortAscending": ": מיין מהקטן לגדול",
+                "sortDescending": ": מיין מהגדול לקטן"
+              }
+            }
+          });
+        })
+        .catch(error => {
+          console.error('שגיאה בטעינת הנתונים:', error);
+          alert('לא ניתן לטעון את הנתונים כרגע. נא לנסות מאוחר יותר.');
+        });
+    });
+  </script>
+</body>
+</html>

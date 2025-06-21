@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>דשבורד מנהלים - מעקב אבטחת מידע</title>
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="cyber-criminal.png">
+
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -31,6 +34,18 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
 
+    .table-container .dataTables_wrapper {
+      padding: 10px 20px;
+    }
+
+    .table-container .dataTables_filter {
+      margin-bottom: 15px;
+    }
+
+    .table-container .dataTables_length {
+      margin-bottom: 15px;
+    }
+
     table {
       width: 100%;
       border-collapse: separate;
@@ -52,11 +67,11 @@
     thead th {
       font-weight: 600;
       font-size: 15px;
-      text-align: right; /* מיושרות לימין */
+      text-align: right;
     }
 
     tbody td {
-      text-align: right; /* תוכן השורות לימין */
+      text-align: right;
     }
 
     tbody tr:hover {
@@ -112,7 +127,7 @@
 
   <script>
     $(document).ready(function() {
-      const apiUrl = 'https://script.google.com/macros/s/AKfycbwyfAyNPtWX7akFXrSkZR3yA0fgZccKQkyll7a_RHKSfhoXhpacQBcf_Oc6pdvDryYvvQ/exec';
+      const apiUrl = 'https://script.google.com/macros/s/AKfycbygq81P1loIS10YEUeX3TWdc4lzeCbXLvmcTC9mzxje3llmFCiqJSXVGIUVrw9mEvUyzg/exec';
 
       fetch(apiUrl)
         .then(response => response.json())
@@ -123,7 +138,7 @@
                 <td>${item['Name'] || '-'}</td>
                 <td>${item['Email'] || '-'}</td>
                 <td>${item['Times Link Was Clicked'] || '0'}</td>
-                <td>${item['Last Day Clicked'] || '-'}</td>
+                <td>${item['Last Day Clicked'] ? formatDate(item['Last Day Clicked']) : '-'}</td>
               </tr>
             `);
           });
@@ -161,6 +176,12 @@
           console.error('שגיאה בטעינת הנתונים:', error);
           alert('לא ניתן לטעון את הנתונים כרגע. נא לנסות מאוחר יותר.');
         });
+
+      function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        if (isNaN(d)) return dateStr;
+        return d.toLocaleDateString('he-IL');
+      }
     });
   </script>
 </body>

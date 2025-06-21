@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>התנסות במייל פישינג לדוגמה</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="cyber-criminal.png">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      margin-top: 60px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0b3d91;
+      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    p {
+      text-align: center;
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #fafafa;
+      text-align: center; /* ממורכז */
+      box-sizing: border-box; /* לא יגלוש */
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #0b3d91;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #0b3d91;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #08337a;
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>התנסות במייל פישינג לדוגמה</h1>
+    <p>השאירו את פרטיכם ובחרו את השעה שבה יישלח אליכם מייל ניסיון — ותוכלו ללמוד לזהות מיילים חשודים</p>
+
+    <form id="phishingForm">
+      <label for="name">שם מלא:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="phone">טלפון:</label>
+      <input type="text" id="phone" name="phone" required>
+
+      <label for="email">כתובת מייל:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="sendTime">בחר שעה לשליחת המייל:</label>
+      <select id="sendTime" name="sendTime" required>
+        <option value="">בחר שעה</option>
+        <option value="08:00">08:00</option>
+        <option value="09:00">09:00</option>
+        <option value="10:00">10:00</option>
+        <option value="11:00">11:00</option>
+        <option value="12:00">12:00</option>
+        <option value="13:00">13:00</option>
+        <option value="14:00">14:00</option>
+        <option value="15:00">15:00</option>
+        <option value="16:00">16:00</option>
+        <option value="17:00">17:00</option>
+      </select>
+
+      <button type="submit">שלח לי את מייל הניסיון</button>
+    </form>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Improve-IT | כל הזכויות שמורות
+  </div>
+
+  <script>
+    document.getElementById('phishingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const sendTime = document.getElementById('sendTime').value;
+
+      if (!sendTime) {
+        alert('נא לבחור שעה לשליחת המייל');
+        return;
+      }
+
+      const url = 'https://script.google.com/macros/s/AKfycbx9ebaf16x-lA-BEI4DFjpclmIun6t_rEtNqYkyp2uvh_zuAsXBH1t-Kr-pFfgB6A16SA/exec';
+
+      const params = new URLSearchParams();
+      params.append('action', 'sendTestPhishing');
+      params.append('name', name);
+      params.append('phone', phone);
+      params.append('email', email);
+      params.append('sendTime', sendTime);
+
+      fetch(url + '?' + params.toString())
+        .then(response => response.json())
+        .then(data => {
+          alert('המייל ישלח בשעה שבחרת! בהצלחה 🎯');
+          document.getElementById('phishingForm').reset();
+        })
+        .catch(error => {
+          console.error('שגיאה בשליחה:', error);
+          alert('אירעה שגיאה בשליחה. נא לנסות שוב מאוחר יותר.');
+        });
+    });
+  </script>
+</body>
+</html>

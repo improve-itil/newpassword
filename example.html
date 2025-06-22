@@ -50,7 +50,7 @@
       color: #444;
     }
 
-    input, select {
+    input {
       width: 100%;
       padding: 12px;
       margin-bottom: 18px;
@@ -58,12 +58,12 @@
       border-radius: 8px;
       font-size: 16px;
       background-color: #fafafa;
-      text-align: center; /* ממורכז */
-      box-sizing: border-box; /* לא יגלוש */
+      text-align: center;
+      box-sizing: border-box;
       transition: border-color 0.3s ease;
     }
 
-    input:focus, select:focus {
+    input:focus {
       border-color: #0b3d91;
       outline: none;
     }
@@ -96,7 +96,7 @@
 
   <div class="container">
     <h1>התנסות במייל פישינג לדוגמה</h1>
-    <p>השאירו את פרטיכם ובחרו את השעה שבה יישלח אליכם מייל ניסיון — ותוכלו ללמוד לזהות מיילים חשודים</p>
+    <p>השאירו את פרטיכם והמייל יישלח אליכם מייד — תוכלו ללמוד לזהות מיילים חשודים</p>
 
     <form id="phishingForm">
       <label for="name">שם מלא:</label>
@@ -107,21 +107,6 @@
 
       <label for="email">כתובת מייל:</label>
       <input type="email" id="email" name="email" required>
-
-      <label for="sendTime">בחר שעה לשליחת המייל:</label>
-      <select id="sendTime" name="sendTime" required>
-        <option value="">בחר שעה</option>
-        <option value="08:00">08:00</option>
-        <option value="09:00">09:00</option>
-        <option value="10:00">10:00</option>
-        <option value="11:00">11:00</option>
-        <option value="12:00">12:00</option>
-        <option value="13:00">13:00</option>
-        <option value="14:00">14:00</option>
-        <option value="15:00">15:00</option>
-        <option value="16:00">16:00</option>
-        <option value="17:00">17:00</option>
-      </select>
 
       <button type="submit">שלח לי את מייל הניסיון</button>
     </form>
@@ -138,12 +123,6 @@
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const email = document.getElementById('email').value.trim();
-      const sendTime = document.getElementById('sendTime').value;
-
-      if (!sendTime) {
-        alert('נא לבחור שעה לשליחת המייל');
-        return;
-      }
 
       const url = 'https://script.google.com/macros/s/AKfycby4g_8Sj-NYlJ8NIYf1ydvrR9bOOwWgqMYxgrqUuMwRAE0FuOlP7ZewIOiOGi6FN9s2yA/exec';
 
@@ -152,12 +131,11 @@
       params.append('name', name);
       params.append('phone', phone);
       params.append('email', email);
-      params.append('sendTime', sendTime);
 
       fetch(url + '?' + params.toString())
         .then(response => response.json())
         .then(data => {
-          alert('המייל ישלח בשעה שבחרת! בהצלחה 🎯');
+          alert('המייל נשלח בהצלחה! בהצלחה 🎯');
           document.getElementById('phishingForm').reset();
         })
         .catch(error => {

@@ -1,101 +1,97 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>דשבורד מנהלים - מעקב אבטחת מידע</title>
   <link rel="icon" type="image/png" href="cyber-criminal.png">
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e5e8ec; color: #222; margin: 0; padding: 20px; direction: rtl;}
-    h1 { text-align: center; color: #0b3d91; margin-bottom: 30px; font-weight: 700;}
-    .table-container { max-width: 1200px; margin: auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);}
-    table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden;}
-    thead { background-color: #0b3d91; color: #fff;}
-    th, td { padding: 14px 16px; border-bottom: 1px solid #ddd; text-align: right;}
-    tbody tr:hover { background-color: #f1f4f8;}
-    .footer { margin-top: 40px; text-align: center; color: #555; font-size: 14px;}
-    @media (max-width: 768px) { .table-container {padding: 15px;} th, td {padding: 10px 12px;} }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e5e8ec; color: #222; margin: 0; padding: 20px; direction: rtl; }
+    h1 { text-align: center; color: #0b3d91; margin-bottom: 30px; font-weight: 700; }
+    .table-container { max-width: 1200px; margin: auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; }
+    thead { background-color: #0b3d91; color: #fff; }
+    th, td { padding: 14px 16px; border-bottom: 1px solid #ddd; }
+    thead th { font-weight: 600; font-size: 15px; text-align: right; }
+    tbody td { text-align: right; }
+    tbody tr:hover { background-color: #f1f4f8; }
+    .footer { margin-top: 40px; text-align: center; color: #555; font-size: 14px; }
   </style>
-  <!-- DataTables CSS -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 </head>
 <body>
+  <h1>דשבורד מנהלים - מעקב אבטחת מידע</h1>
+  <div class="table-container">
+    <table id="employeeTable" class="display">
+      <thead>
+        <tr>
+          <th>שם העובד</th>
+          <th>כתובת מייל</th>
+          <th>סטטוס שליחה</th>
+          <th># קליקים</th>
+          <th>תאריך קליק ראשון</th>
+          <th>תאריך קליק אחרון</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div class="footer">&copy; 2025 Improve-IT | כל הזכויות שמורות</div>
 
-<h1>דשבורד מנהלים - מעקב אבטחת מידע</h1>
-<div class="table-container">
-  <table id="employeeTable" class="display">
-    <thead>
-      <tr>
-        <th>שם העובד</th>
-        <th>כתובת מייל</th>
-        <th>מספר קליקים</th>
-        <th>תאריך קליק ראשון</th>
-        <th>תאריך קליק אחרון</th>
-        <th>סטטוס שליחה</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-<div class="footer">
-  &copy; 2025 Improve-IT | כל הזכויות שמורות
-</div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      // URL חכם - מזהה אם GitHub או Apps Script
+      const scriptUrl = 'https://script.google.com/macros/s/AKfycbzMQVFEINfELw6_P6osM-dfi89ztdu2VaCSqI3k_IIYH-iH-vv6TfPLF3wKWNQclHUdbA/exec';
+      const apiUrl = (location.hostname.includes('github.io'))
+        ? scriptUrl + '?action=getData'
+        : location.origin + location.pathname + '?action=getData';
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script>
-  function formatDate(dateStr) {
-    if (!dateStr) return '-';
-    const parts = dateStr.split(' ');
-    if (parts.length === 2) {
-      const d = parts[0].split('/'); // dd/MM/yyyy
-      return `${d[0]}/${d[1]}/${d[2]} ${parts[1]}`;
-    }
-    return dateStr;
-  }
-
-  $(document).ready(function() {
-    // קבלת נתונים ישירות מהשרת (Apps Script)
-    google.script.run.withSuccessHandler(function(data) {
-      // data: מערך דו־ממדי
-      // [0] שורת כותרות
-      for (var i = 1; i < data.length; i++) {
-        var row = data[i];
-        $('#employeeTable tbody').append(`
-          <tr>
-            <td>${row[0] || '-'}</td>
-            <td>${row[1] || '-'}</td>
-            <td>${row[3] || '0'}</td>
-            <td>${formatDate(row[4])}</td>
-            <td>${formatDate(row[5])}</td>
-            <td>${row[2] || '-'}</td>
-          </tr>
-        `);
-      }
-      $('#employeeTable').DataTable({
-        order: [[2, 'desc']],
-        pageLength: 25,
-        language: {
-          "decimal": "",
-          "emptyTable": "אין נתונים בטבלה",
-          "info": "מציג _START_ עד _END_ מתוך _TOTAL_ רשומות",
-          "infoEmpty": "מציג 0 עד 0 מתוך 0 רשומות",
-          "infoFiltered": "(מסונן מתוך _MAX_ רשומות סה\"כ)",
-          "lengthMenu": "הצג _MENU_ רשומות",
-          "loadingRecords": "טוען...",
-          "processing": "מעבד...",
-          "search": "חיפוש:",
-          "zeroRecords": "לא נמצאו רשומות תואמות",
-          "paginate": {
-            "first": "ראשון",
-            "last": "אחרון",
-            "next": "הבא",
-            "previous": "הקודם"
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          if (!data || data.length < 1) {
+            $('#employeeTable tbody').append('<tr><td colspan="6">אין נתונים</td></tr>');
+            return;
           }
-        }
-      });
-    }).getPhishingData();
-  });
-</script>
+
+          data.forEach(row => {
+            $('#employeeTable tbody').append(`
+              <tr>
+                <td>${row.name || '-'}</td>
+                <td>${row.email || '-'}</td>
+                <td>${row.status || '-'}</td>
+                <td>${row.clicks || '0'}</td>
+                <td>${row.firstClick || '-'}</td>
+                <td>${row.lastClick || '-'}</td>
+              </tr>
+            `);
+          });
+
+          $('#employeeTable').DataTable({
+            order: [[3, 'desc']],
+            pageLength: 25,
+            language: { 
+              "decimal": "",
+              "emptyTable": "אין נתונים בטבלה",
+              "info": "מציג _START_ עד _END_ מתוך _TOTAL_ רשומות",
+              "infoEmpty": "מציג 0 עד 0 מתוך 0 רשומות",
+              "infoFiltered": "(מסונן מתוך _MAX_ רשומות סה\"כ)",
+              "lengthMenu": "הצג _MENU_ רשומות",
+              "loadingRecords": "טוען...",
+              "processing": "מעבד...",
+              "search": "חיפוש:",
+              "zeroRecords": "לא נמצאו רשומות תואמות",
+              "paginate": { "first": "ראשון", "last": "אחרון", "next": "הבא", "previous": "הקודם" }
+            }
+          });
+        })
+        .catch(err => {
+          console.error('שגיאה בטעינת הדאטה:', err);
+          $('#employeeTable tbody').append('<tr><td colspan="6">שגיאה בטעינת הדאטה</td></tr>');
+        });
+    });
+  </script>
 </body>
 </html>

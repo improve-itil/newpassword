@@ -25,6 +25,10 @@
     p {
       margin: 10px 0;
     }
+    #status {
+      font-weight: bold;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -33,19 +37,38 @@
     <p>המייל שקיבלתם היה תרגול פישינג להגברת מודעות האבטחה.</p>
     <p>הקליק נרשם לצורך ניתוח בלבד.</p>
     <p>תודה על שיתוף הפעולה.</p>
-    <p id="status" style="color: green;">✅ הקליק נרשם בהצלחה</p>
+    <p id="status" style="color: blue;">⏳ רושם את הקליק...</p>
   </div>
 
   <script>
     const email = new URLSearchParams(window.location.search).get('email');
+    const statusElement = document.getElementById('status');
+
     if (email) {
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = `https://script.google.com/macros/s/AKfycbzMQVFEINfELw6_P6osM-dfi89ztdu2VaCSqI3k_IIYH-iH-vv6TfPLF3wKWNQclHUdbA/exec?email=${encodeURIComponent(email)}`;
-      document.body.appendChild(iframe);
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbzMQVFEINfELw6_P6osM-dfi89ztdu2VaCSqI3k_IIYH-iH-vv6TfPLF3wKWNQclHUdbA/exec'; // החלף בכתובת ה-Web App שלך
+
+      fetch(`${scriptURL}?email=${encodeURIComponent(email)}`)
+        .then(response => response.text())
+        .then(result => {
+          if (result === "OK") {
+            statusElement.textContent = "✅ הקליק נרשם בהצלחה";
+            statusElement.style.color = "green";
+          } else if (result === "NOT_FOUND") {
+            statusElement.textContent = "⚠️ לא נמצא אימייל במערכת";
+            statusElement.style.color = "orange";
+          } else {
+            statusElement.textContent = "⚠️ אירעה שגיאה בעיבוד הנתונים";
+            statusElement.style.color = "red";
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          statusElement.textContent = "⚠️ שגיאה בשליחת הנתונים";
+          statusElement.style.color = "red";
+        });
     } else {
-      document.getElementById('status').textContent = '⚠️ לא התקבל אימייל לזיהוי הקליק';
-      document.getElementById('status').style.color = 'orange';
+      statusElement.textContent = "⚠️ לא התקבל אימייל לזיהוי הקליק";
+      statusElement.style.color = "orange";
     }
   </script>
 </body>

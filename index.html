@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>שים לב!</title>
+  <title>שימו לב!</title>
   <style>
     body {
       font-family: sans-serif;
@@ -33,20 +33,19 @@
     <p>המייל שקיבלתם היה תרגול פישינג להגברת מודעות האבטחה.</p>
     <p>הקליק נרשם לצורך ניתוח בלבד.</p>
     <p>תודה על שיתוף הפעולה.</p>
-    <p id="status" style="color: green;"></p>
+    <p id="status" style="color: green;">✅ הקליק נרשם בהצלחה</p>
   </div>
 
   <script>
     const email = new URLSearchParams(window.location.search).get('email');
     if (email) {
-      fetch(`https://script.google.com/macros/s/AKfycbzMQVFEINfELw6_P6osM-dfi89ztdu2VaCSqI3k_IIYH-iH-vv6TfPLF3wKWNQclHUdbA/exec?email=${encodeURIComponent(email)}`)
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('status').textContent = '✅ קליק נרשם בהצלחה';
-      })
-      .catch(error => {
-        document.getElementById('status').textContent = '⚠️ אירעה שגיאה ברישום הקליק';
-      });
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = `https://script.google.com/macros/s/AKfycbzMQVFEINfELw6_P6osM-dfi89ztdu2VaCSqI3k_IIYH-iH-vv6TfPLF3wKWNQclHUdbA/exec?email=${encodeURIComponent(email)}`;
+      document.body.appendChild(iframe);
+    } else {
+      document.getElementById('status').textContent = '⚠️ לא התקבל אימייל לזיהוי הקליק';
+      document.getElementById('status').style.color = 'orange';
     }
   </script>
 </body>

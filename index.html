@@ -59,20 +59,24 @@
                 return;
             }
 
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzMQVFEINfELw6_P6osM-dfi89ztdu2VaCSqI3k_IIYH-iH-vv6TfPLF3wKWNQclHUdbA/exec';
+            const webhookURL = 'https://hook.eu2.make.com/8i7f7gb8gwqvhz7vwiupgmtp7at6x5a1';
 
-            fetch(scriptURL + '?email=' + encodeURIComponent(email))
-                .then(response => {
-                    if (response.ok) {
-                        document.getElementById('statusMessage').textContent = 'הפעולה נרשמה בהצלחה.';
-                    } else {
-                        document.getElementById('statusMessage').textContent = 'אירעה שגיאה בשליחת הנתון.';
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('statusMessage').textContent = 'שגיאה בחיבור לשרת.';
-                    console.error('Error reporting click:', error);
-                });
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('statusMessage').textContent = 'הפעולה נרשמה בהצלחה.';
+                } else {
+                    document.getElementById('statusMessage').textContent = 'אירעה שגיאה בשליחת הנתון.';
+                }
+            })
+            .catch(error => {
+                document.getElementById('statusMessage').textContent = 'שגיאה בחיבור לשרת.';
+                console.error('Error reporting click:', error);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
